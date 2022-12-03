@@ -1,5 +1,7 @@
 object Main {
   def main(args: Array[String]): Unit = {
-    println("Hello world!")
+    val problem = Day3()
+    val answer = problem.part2()
+    println(answer)
   }
 }
