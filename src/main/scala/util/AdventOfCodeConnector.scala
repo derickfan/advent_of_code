@@ -11,7 +11,7 @@ import scala.util.Using
 
 object AdventOfCodeConnector {
 
-  private val baseUrl = "https://adventofcode.com/2021/day"
+  private val baseUrl = "https://adventofcode.com/2022/day"
   private val token = sys.env.getOrElse("token", throw new Exception("No token!"))
 
   private def downloadFile(day: String): Unit = {
