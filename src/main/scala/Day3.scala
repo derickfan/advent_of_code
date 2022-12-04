@@ -1,7 +1,7 @@
-import util.FileDownloader
+import util.AdventOfCodeConnector
 
 case class Day3() extends Problem {
-  override def getData(): Seq[String] = FileDownloader.getData("3")
+  override def getData(): Seq[String] = AdventOfCodeConnector.getData("3")
 
   override def part1(): Number = {
     val items = getData()
