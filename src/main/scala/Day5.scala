@@ -20,16 +20,7 @@ case class Day5() extends Problem[String] {
     val chartWithIndex = chart.map(_.zipWithIndex)
     val initialStack = getInitialStack(chartWithIndex)
 
-    val endStack = instructions.tail.foldLeft(initialStack){ (accumulator, instruction) =>
-      val (amount, from ,to) = getValues(instruction)
-      val fromBlocks = accumulator(from).blocks.dropRight(amount)
-      val movingBlocks = accumulator(from).blocks.slice(fromBlocks.length, fromBlocks.length + amount)
-      val toBlocks = accumulator(to).blocks ++ movingBlocks.reverse
-      accumulator + (
-        from -> accumulator(from).copy(blocks = fromBlocks),
-        to -> accumulator(to).copy(blocks = toBlocks)
-      )
-    }
+    val endStack = instructions.tail.foldLeft(initialStack)(moveBlock(_, _, part1 = true))
 
     getTopRow(endStack)
   }
@@ -40,18 +31,24 @@ case class Day5() extends Problem[String] {
     val chartWithIndex = chart.map(_.zipWithIndex)
     val initialStack = getInitialStack(chartWithIndex)
 
-    val endStack = instructions.tail.foldLeft(initialStack) { (accumulator, instruction) =>
-      val (amount, from, to) = getValues(instruction)
-      val fromBlocks = accumulator(from).blocks.dropRight(amount)
-      val movingBlocks = accumulator(from).blocks.slice(fromBlocks.length, fromBlocks.length + amount)
-      val toBlocks = accumulator(to).blocks ++ movingBlocks
-      accumulator + (
-        from -> accumulator(from).copy(blocks = fromBlocks),
-        to -> accumulator(to).copy(blocks = toBlocks)
-      )
-    }
+    val endStack = instructions.tail.foldLeft(initialStack)(moveBlock(_, _, part1 = false))
 
     getTopRow(endStack)
+  }
+
+  private def moveBlock(accumulator: Map[Int, Column], instruction: String, part1: Boolean): Map[Int, Column] = {
+    val (amount, from, to) = getValues(instruction)
+    val fromBlocks = accumulator(from).blocks.dropRight(amount)
+    val movingBlocks = accumulator(from).blocks.slice(fromBlocks.length, fromBlocks.length + amount)
+    val toBlocks = if (part1) {
+      accumulator(to).blocks ++ movingBlocks.reverse
+    } else {
+      accumulator(to).blocks ++ movingBlocks
+    }
+    accumulator ++ (
+      from -> accumulator(from).copy(blocks = fromBlocks),
+      to -> accumulator(to).copy(blocks = toBlocks)
+    )
   }
 
   private def getTopRow(endStack: Map[Int, Column]) = {
@@ -60,7 +57,7 @@ case class Day5() extends Problem[String] {
 
   private def getInitialStack(chartWithIndex: Seq[IndexedSeq[(Char, Int)]]) = {
     chartWithIndex.foldLeft(stacks) { (accumulator, row) =>
-      val blocks = row.filter(a => a._1.isLetter).map((a) => (a._1, (a._2 - 1) / 4))
+      val blocks = row.filter(a => a._1.isLetter).map(a => (a._1, (a._2 - 1) / 4))
       blocks.foldLeft(accumulator) { (stack, crate) => {
         val idx = crate._2
         val temp = stack(idx)
@@ -71,10 +68,10 @@ case class Day5() extends Problem[String] {
   }
 
   private def getValues(instruction: String): (Int, Int, Int) = {
-    val nums = instruction.split(" ").toList
-    val amount = nums(1).toInt
-    val from = nums(3).toInt - 1
-    val to = nums(5).toInt - 1
+    val values = instruction.split(" ").toList
+    val amount = values(1).toInt
+    val from = values(3).toInt - 1
+    val to = values(5).toInt - 1
     (amount, from, to)
   }
 }

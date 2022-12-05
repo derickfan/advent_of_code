@@ -6,18 +6,16 @@ case class Day3() extends Problem[Number] {
   override def part1(): Number = {
     val items = getData()
     val values = items.toList.map((i: String) => {
-      val mid = i.size / 2
+      val mid = i.length / 2
       val item1 = i.substring(0, mid)
-      val item2 = i.substring(mid, i.size)
+      val item2 = i.substring(mid, i.length)
       val commonItem = item1.filter(item2.contains(_))
       commonItem.codePointAt(0) match {
         case value if value < 91 => value - 38
         case value if value > 91 => value - 96
       }
     })
-
-    val sum = values.foldLeft(0)((sum, currentValue) => sum + currentValue)
-    sum
+    values.sum
   }
 
   override def part2(): Number = {
@@ -32,8 +30,7 @@ case class Day3() extends Problem[Number] {
         case value if value > 91 => value - 96
       }
     })
-    val sum = groups.foldLeft(0)((sum, currentValue) => sum + currentValue)
-    sum
+    groups.sum
   }
 }
 
