@@ -1,7 +1,7 @@
 import util.AdventOfCodeConnector
 
 
-case class Day4() extends Problem {
+case class Day4() extends Problem[Number] {
   case class AssignmentPairs(left: Int, right: Int)
 
 

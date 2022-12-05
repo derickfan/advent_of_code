@@ -1,7 +1,7 @@
 
 import util.AdventOfCodeConnector
 
-case class Day2() extends Problem {
+case class Day2() extends Problem[Number] {
   override def getData(): Seq[String] = AdventOfCodeConnector.getData("2")
 
   override def part1(): Number = {
