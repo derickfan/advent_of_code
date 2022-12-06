@@ -45,7 +45,7 @@ case class Day5() extends Problem[String] {
     } else {
       accumulator(to).blocks ++ movingBlocks
     }
-    accumulator ++ (
+    accumulator + (
       from -> accumulator(from).copy(blocks = fromBlocks),
       to -> accumulator(to).copy(blocks = toBlocks)
     )
